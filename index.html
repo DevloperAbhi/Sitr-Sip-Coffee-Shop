@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>STIR & SIP Juice Bar And Cafe</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: #ebebeb;
+            overflow-x: hidden;
+        }
+
+        /* Header & Branding */
+        header {
+            background: linear-gradient(135deg, #ff7043, #ff9800);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 60px;
+            letter-spacing: 6px;
+            margin: 0;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: fadeSlide 1.5s ease-in-out;
+        }
+
+        .brand-sub {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-top: 5px;
+            color: #000b0f;
+        }
+
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 10px;
+            color: #000b0f;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: #3e2723;
+            padding: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            margin: 5px 15px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            padding: 8px 5px;
+            transition: color 0.3s ease;
+        }
+
+        nav button:hover, nav button.active {
+            color: #ffcc80;
+        }
+
+        nav button::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            background: #ffcc80;
+            transition: width 0.3s ease;
+        }
+
+        nav button.active::after, nav button:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger for Mobile */
+        .hamburger {
+            display: none;
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        .section {
+            display: none; /* Default hide all */
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Hero Slider */
+        .hero-slider-wrapper {
+            position: relative;
+            height: 70vh;
+            width: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .slides-container {
+            display: flex;
+            width: 400%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        .slide-img {
+            width: 100vw;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 90%;
+            z-index: 10;
+
+            /* नवीन जोडलेले: बटण आणि डॉट्समध्ये गॅप ठेवण्यासाठी */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* बटण आणि डॉट्समधील अंतर */
+        }
+
+        /* Dots */
+        .dot-container {
+            display: flex; /* डॉट्स आडवे दिसण्यासाठी */
+            justify-content: center;
+            gap: 10px;
+            position: static; /* 👈 हे महत्त्वाचे आहे, absolute काढून टाका */
+            margin-top: 5px;   /* बटणापासून थोडे अतिरिक्त अंतर हवे असल्यास */
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.3);
+          
+        }
+
+        .hero-content p {
+            margin: 0; 
+            font-size: 1.8rem;
+            font-weight: 600;
+         }
+
+
+        .hero-btn {
+            background: #ff7043;
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: 0.3s;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero-btn:hover {
+            background: #ff5722;
+            transform: scale(1.05);
+        }
+
+      
+
+        .active-dot {
+            background-color: #ff7043;
+            transform: scale(1.3);
+        }
+
+        /* Menu Grid */
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 240px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .card:hover { transform: translateY(-10px); }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #3e2723;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            justify-content: center; /* मोबाईलवर आयटम्स सेंटरला करण्यासाठी */
+            align-items: center;     /* आयटम्स उभे (vertically) सेंटरला करण्यासाठी */
+        }
+
+        .contact-info, .map-box {
+            flex: 1;
+            min-width: 300px;
+            background: transparent;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            text-decoration: none;
+            color: #3e2723;
+            font-weight: 600;
+        }
+
+        .contact-item img { width: 30px; }
+
+        .map-box iframe {
+            pointer-events: auto; /* मॅप झूम करण्यासाठी हे आवश्यक आहे */
+            -webkit-user-drag: none; /* फ्रेम ओढली जाण्यापासून वाचवते */
+        }
+
+        /* Footer */
+        footer {
+            background: #3e2723;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 0; 
+            font-size: 14px; 
+        }
+
+        /* Animations */
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive UI */
+        @media (max-width: 768px) {
+            .brand-name { font-size: 38px; }
+            .hamburger { display: block; margin-left: auto; }
+            nav button { display: none; width: 100%; text-align: center; }
+            nav.open button { display: block; }
+            .hero-slider-wrapper { height: 50vh; }
+            .hero-content p { font-size: 1.2rem; }
+            .contact-container { flex-direction: column; }
+            .hero-btn {
+        padding: 1px 10px;    /* 👈 मोबाईलवर बटण लहान होईल */
+        font-size: 1rem;       /* 👈 मोबाईलवर फॉन्ट लहान होईल */
+        border-radius: 10px;
+        }}
+
+.chef-slider {
+  background: #dd9b3f;
+  padding: 60px 20px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.chef-slider h2 {
+  font-size: 30px;
+  color: #141311;
+  margin-bottom: 50px;
+}
+
+.slider-container {
+    overflow: hidden;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.chef-cards {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  transition: transform 0.6s ease;
+  will-change: transform;
+}
+
+
+.chef-card {
+  min-width: 280px;
+  border: 2px solid #0d0d0c;
+  background: #ececee;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  text-align: center;
+}
+
+.chef-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+}
+
+.chef-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #0d0d0c;
+  margin: 0 auto 15px auto; /* इमेज सेंटरला ठेवण्यासाठी */
+  display: block;
+}
+
+.chef-card h3 {
+  font-size: 22px;
+  color: #3e2723;
+}
+
+
+.desc {
+  font-size: 15px;
+  color: #5d4037;
+  margin: 10px 0;
+}
+@media (max-width: 768px) {
+    .contact-info, .map-box {
+        width: 100%;       /* मोबाईलवर पूर्ण रुंदी */
+        max-width: 350px;  /* स्क्रीनपेक्षा जास्त मोठे दिसू नये म्हणून */
+        margin: 0 auto;    /* सर्वात महत्त्वाचे: यामुळे बॉक्स सेंटरला येतो */
+        box-sizing: border-box; 
+    }
+    
+    .contact-container {
+        flex-direction: column; /* एकाखाली एक येण्यासाठी */
+        align-items: center;
+    
+    }
+}
+
+/* कार्ट बटन स्टाईल */
+.add-btn {
+    background: #3e2723;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* तरंगणारी कार्ट विंडो (Floating Cart) */
+#cart-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 2000;
+    width: 280px;
+    display: none; /* सुरुवातीला लपवलेले असेल */
+}
+
+#cart-container h4 { margin: 0 0 10px 0; color: #3e2723; }
+#cart-items { list-style: none; padding: 0; max-height: 150px; overflow-y: auto; }
+#cart-items li { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; }
+.total-price { font-weight: bold; border-top: 1px solid #ddd; padding-top: 10px; }
+
+.remove-btn {
+    background: #ff5252;
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.remove-btn:hover {
+    background: #d32f2f;
+}
+
+/* व्हॉट्सॲप फ्लोटिंग बटण स्टाईल */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 90px; /* कार्ट कंटेनरच्या थोडे वर ठेवण्यासाठी */
+    right: 20px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    box-shadow: 2px 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    color: #FFF;
+}
+
+/* मोबाईलवर बटण थोडे लहान दिसण्यासाठी */
+@media screen and (max-width: 768px) {
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 80px;
+        right: 15px;
+        font-size: 28px;
+    }
+}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="brand-name">STIR <span style="color:#3e2723;">&</span> SIP</h1>
+    <div class="brand-sub">Juice Bar & Café</div>
+    <p class="tagline">Fresh • Natural • Refreshing</p>
+</header>
+
+<nav id="navbar">
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <button onclick="show('Home', this)" class="active">Home</button>
+    <button onclick="show('juices', this)">Juices</button>
+    <button onclick="show('Shakes', this)">Shakes</button>
+    <button onclick="show('coffee', this)">Coffee & Tea</button>
+    <button onclick="show('Snacks & Desserts', this)">Snacks & Desserts</button>
+    <button onclick="show('momos', this)">Momos</button>
+    <button onclick="show('contact', this)">Contact</button>
+</nav>
+
+ <div id="Home" class="section active">
+    <section class="hero-slider-wrapper">
+        <div class="slides-container" id="slides-container">
+            <img src="images/slide1.jpg" class="slide-img" alt="Slide 1">
+            <img src="images/slide2.jpg" class="slide-img" alt="Slide 2">
+            <img src="images/slide3.jpg" class="slide-img" alt="Slide 3">
+        </div>
+        <div class="hero-content">
+            <p id="hero-text">Pure & Refreshing Juices Made Daily 🍹</p>
+            
+            <a href="javascript:void(0)" onclick="show('juices')" class="hero-btn">Order Now</a>
+
+            <div class="dot-container">
+            <span class="dot active-dot" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+          </div>
+        </div>   
+    </section>
+
+<section class="chef-slider">
+
+  <h2>Our Expert Team</h2>
+
+  <div class="slider-container">
+    <div class="chef-cards">
+
+      <!-- Chef 1 -->
+      <div class="chef-card">
+        <img src="images/chef1.jpeg" alt="">
+        <h3>Rohan Kharat</h3>
+        <p class="desc">Expert in brewing aromatic and premium coffee.</p>
+      </div>
+
+      <!-- Chef 2 -->
+      <div class="chef-card">
+        <img src="images/chef2.jpeg" alt="">
+        <h3>Shekhar Kharat</h3>
+        <p class="desc">Creates refreshing juices using fresh fruits.</p>
+      </div>
+
+      <!-- Chef 3 -->
+      <div class="chef-card">
+        <img src="images/chef3.jpeg" alt="">
+        <h3>Abhineet Kharat</h3>
+        <p class="desc">Passionate about latte art and coffee blends.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <div style="text-align:center; padding: 60px 20px;">
+        <h2 style="font-size: 30px;">About Us</h2>
+        <p style="max-width: 800px; margin: auto; font-size: 18px; line-height: 1.5;">
+         
+  <h3>Welcome to STIR & SIP</h3>
+  <p class="tagline">
+    The only destination in Chhatrapati Sambhajinagar for the freshest fruit juices and aromatic coffee!
+  </p>
+
+  <p class="subline">
+    Freshness, great taste, and quality you can trust.
+  </p>
+
+  <p>
+    <b>STIR & SIP</b> is a modern Juice Bar & Cafe located in Chhatrapati Sambhajinagar, 
+    where we serve fresh fruit juices and aromatic coffee prepared with love and care.
+  </p>
+
+  <p>
+    We believe that great taste always comes from freshness. That's why we use handpicked, 
+    fresh fruits every day to create 100% fresh and refreshing fruit juices.
+  </p>
+
+  <p>
+    At STIR & SIP, our goal is not just to serve drinks, but to deliver a truly refreshing 
+    experience in every sip. We are committed to maintaining the highest standards of 
+    quality, hygiene, and customer satisfaction.
+  </p>
+
+  <p>
+    For our customers in Chhatrapati Sambhajinagar, we continuously strive to offer 
+    perfect coffee, a clean and welcoming environment, and friendly service.
+  </p>
+        </p>
+    </div>
+</div>
+
+<div id="juices" class="section">
+    <h2 style="text-align:center;">Fresh Fruit Juices</h2>
+    <div class="grid">
+        <div class="card"><img src="images/watermelon.jpg" alt="Watermelon"><h3>Watermelon</h3><p>₹49</p><button class="add-btn" onclick="addToCart('Watermelon', 49)">Add to Cart</button></div>
+        <div class="card"><img src="images/Mosambi.jpeg" alt="Mosambi"><h3>Mosambi</h3><p>₹49</p><button class="add-btn" onclick="addToCart('Mosambi', 49)">Add to Cart</button></div>
+        <div class="card"><img src="images/orange.webp" alt="Orange"><h3>Orange</h3><p>₹59</p><button class="add-btn" onclick="addToCart('Orange', 59)">Add to Cart</button></div>
+        <div class="card"><img src="images/Apple.jpg" alt="Apple"><h3>Apple</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Apple', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Pineapple.jpg" alt="Pineapple Juice"><h3>Pineapple</h3><p>₹49</p><button class="add-btn" onclick="addToCart('Pineapple', 49)">Add to Cart</button></div>
+      <div class="card"><img src="images/kiwi.jpg" alt="Kiwi Juice"><h3>Kiwi</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Kiwi', 69)">Add to Cart</button></div>
+      <div class="card"><img src="images/Anar.jpg" alt="Anar Juice"><h3>Anar</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Anar', 69)">Add to Cart</button></div>
+    </div>
+    <h2 style="text-align:center;">Juice Combos</h2>
+      <div class="grid">
+      <div class="card"><img src="images/Apple Pine.png" alt="Apple Pine"><h3>Apple Pine</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Apple Pine', 89)">Add to Cart</button></div>
+      <div class="card"><img src="images/Kiwi Sparkle.jpeg" alt="Kiwi Sparkle"><h3>Kiwi Sparkle</h3><p>₹99</p><button class="add-btn" onclick="addToCart('Kiwi Sparkle', 99)">Add to Cart</button></div>
+      <div class="card"><img src="images/Lime Pineapple.jpg" alt="Lime Pine"><h3>Lime Pine</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Lime Pine', 79)">Add to Cart</button></div>
+      <div class="card"><img src="images/Pineberry Splash.webp" alt="Pineberry Splash"><h3>Pineberry Splash</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Pineberry Splash', 89)">Add to Cart</button></div>
+      <div class="card"><img src="images/Citrus Twist.webp" alt="Citrus Twist"><h3>Citrus Twist</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Citrus Twist', 79)">Add to Cart</button></div>
+      <div class="card"><img src="images/Mosambi Magic.webp" alt="Mosambi Magic"><h3>Mosambi Magic</h3><p>₹88</p><button class="add-btn" onclick="addToCart('Mosambi Magic', 88)">Add to Cart</button></div>
+    </div>
+</div>
+
+</div>
+
+<div id="Shakes" class="section">
+    <h2 style="text-align:center;">Delicious Shakes</h2>
+    <div class="grid">
+        <div class="card"><img src="images/Oreo.jpg" alt="Oreo"><h3>Oreo</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Oreo', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Chickoo.webp" alt="Chickoo"><h3>Chickoo</h3><p>₹59</p><button class="add-btn" onclick="addToCart('Chickoo', 59)">Add to Cart</button></div>
+        <div class="card"><img src="images/Brownie.jpg" alt="Brownie"><h3>Brownie</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Brownie', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Kit-Kat.webp" alt="Kit-Kat"><h3>Kit-Kat</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Kit-Kat', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Nutella.jpg" alt="Nutella"><h3>Nutella</h3><p>₹99</p><button class="add-btn" onclick="addToCart('Nutella', 99)">Add to Cart</button></div>
+        <div class="card"><img src="images/Vanilla.jpg" alt="Vanilla"><h3>Vanilla</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Vanilla', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Apple Shake.jpg" alt="Apple"><h3>Apple</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Apple', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Mango.jpeg" alt="Mango"><h3>Mango</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Mango', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Sitafal.jpg" alt="Sitafal"><h3>Sitafal</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Sitafal', 89)">Add to Cart</button></div>
+        <div class="card"><img src="images/Anjeer.avif" alt="Anjeer"><h3>Anjeer</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Anjeer', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Khajoor Mastani.jpg" alt="Khajoor Mastani"><h3>Khajoor Mastani</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Khajoor Mastani', 89)">Add to Cart</button></div>
+        <div class="card"><img src="images/Strawberry Shake.jpeg" alt="Strawberry"><h3>Strawberry</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Strawberry', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Banana Dry Fruits.jpg" alt="Banana Dry Fruits"><h3>Banana Dry Fruits</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Banana Dry Fruits', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Lotus Biscoff.jpeg" alt="Lotus Biscoff"><h3>Lotus Biscoff</h3><p>₹79</p><button class="add-btn" onclick="addToCart('Lotus Biscoff', 79)">Add to Cart</button></div>
+        <div class="card"><img src="images/Dark Chocolate.jpeg" alt="Dark Chocolate"><h3>Dark Chocolate</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Dark Chocolate', 89)">Add to Cart</button></div>
+        <div class="card"><img src="images/Hot Choco Cup.webp" alt="Hot Choco Cup"><h3>Hot Choco Cup</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Hot Choco Cup', 69)">Add to Cart</button></div>
+    </div>
+</div>
+
+<div id="coffee" class="section">
+    <h2 style="text-align:center;">Coffee</h2>
+    <div class="grid">
+        <div class="card"><img src="images/Cold Coffee.jpg" alt="Cold Coffee"><h3>Cold Coffee</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Cold Coffee', 69)">Add to Cart</button></div>
+        <div class="card"><img src="images/Coffee With Ice-Cream.jpg" alt="Coffee With Ice-Cream"><h3>Coffee With Ice-Cream</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Coffee With Ice-Cream', 89)">Add to Cart</button></div>
+        <div class="card"><img src="images/Coffee With Crush.avif" alt="Coffee With Crush"><h3>Coffee With Crush</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Coffee With Crush', 89)">Add to Cart</button></div>
+        <div class="card"><img src="images/Coffee With Brownie.jpg" alt="Coffee With Brownie"><h3>Coffee With Brownie</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Coffee With Brownie', 89)">Add to Cart</button></div>
+    </div>
+    <h2 style="text-align:center;">Coffee & Tea</h2>
+    <div class="grid">
+      <div class="card"><img src="images/Hot Coffee.avif" alt="Hot Coffee"><h3>Hot Coffee</h3><p>₹15</p><button class="add-btn" onclick="addToCart('Hot Coffee', 15)">Add to Cart</button></div>
+      <div class="card"><img src="images/Black Coffee.avif" alt="Black Coffee"><h3>Black Coffee</h3><p>₹15</p><button class="add-btn" onclick="addToCart('Black Coffee', 15)">Add to Cart</button></div>
+      <div class="card"><img src="images/Masala Chai.jpg" alt="Masala Chai"><h3>Masala Chai</h3><p>₹10</p><button class="add-btn" onclick="addToCart('Masala Chai', 10)">Add to Cart</button></div>
+      <div class="card"><img src="images/Lemon Tea.jpeg" alt="Lemon Tea"><h3>Lemon Tea</h3><p>₹10</p><button class="add-btn" onclick="addToCart('Lemon Tea', 10)">Add to Cart</button></div>
+      <div class="card"><img src="images/Green Tea.jpg" alt="Green Tea"><h3>Green Tea</h3><p>₹20</p><button class="add-btn" onclick="addToCart('Green Tea', 20)">Add to Cart</button></div>
+    </div>
+</div>
+
+<div id="Snacks & Desserts" class="section">
+    <h2 style="text-align:center;">Snacks & Desserts</h2>
+    <div class="grid">
+      <div class="card"><img src="images/Masala Maggie.webp" alt="Masala Maggie"><h3>Masala Maggie</h3><p>₹49</p><button class="add-btn" onclick="addToCart('Masala Maggie', 49)">Add to Cart</button></div>
+      <div class="card"><img src="images/Cheese Maggie.avif" alt="Cheese Maggie"><h3>Cheese Maggie</h3><p>₹59</p><button class="add-btn" onclick="addToCart('Cheese Maggie', 59)">Add to Cart</button></div>
+      <div class="card"><img src="images/Peri Peri Fries.jpeg" alt="Peri Peri Fries"><h3>Peri Peri Fries</h3><p>₹69</p><button class="add-btn" onclick="addToCart('Peri Peri Fries', 69)">Add to Cart</button></div>
+      <div class="card"><img src="images/Chilli Cheesy Fries.jpeg" alt="Chilli Cheesy Fries"><h3>Chilli Cheesy Fries</h3><p>₹89</p><button class="add-btn" onclick="addToCart('Chilli Cheesy Fries', 89)">Add to Cart</button></div>
+      <div class="card"><img src="images/Mug Cake.jpg" alt="Mug Cake"><h3>Mug Cake</h3><p>₹109</p><button class="add-btn" onclick="addToCart('Mug Cake', 109)">Add to Cart</button></div>
+      <div class="card"><img src="images/Fruit Bowl.jpg" alt="Fruit Bowl"><h3>Fruit Bowl</h3><p>₹109</p><button class="add-btn" onclick="addToCart('Fruit Bowl', 109)">Add to Cart</button></div>
+      <div class="card"><img src="images/Dri Fruit Falooda.jpeg" alt="Dri Fruit Falooda"><h3>Dry Fruit Falooda</h3><p>₹109</p><button class="add-btn" onclick="addToCart('Dry Fruit Falooda', 109)">Add to Cart</button></div>
+    </div>
+</div>
+
+<div id="momos" class="section">
+    <h2 style="text-align:center;">Momo's Special</h2>
+    <div class="grid">
+      <div class="card"><img src="images/Veg Steam.jpeg" alt="Veg Steam"><h3>Veg Steam</h3><p>₹45</p><button class="add-btn" onclick="addToCart('Veg Steam', 45)">Add to Cart</button></div>
+      <div class="card"><img src="images/Veg Fry.webp" alt="Veg Fry"><h3>Veg Fry</h3><p>₹45</p><button class="add-btn" onclick="addToCart('Veg Fry', 45)">Add to Cart</button></div>
+      <div class="card"><img src="images/Chicken Steam.webp" alt="Chicken Steam"><h3>Chicken Steam</h3><p>₹55</p><button class="add-btn" onclick="addToCart('Chicken Steam', 55)">Add to Cart</button></div>
+      <div class="card"><img src="images/Chicken Fry.jpg" alt="Chikan Fry"><h3>Chicken Fry</h3><p>₹55</p><button class="add-btn" onclick="addToCart('Chicken Fry', 55)">Add to Cart</button></div>
+    </div>
+</div>
+
+<div id="contact" class="section">
+    <h2 style="text-align:center; width: 100%; margin-bottom: 20px;">Contact Us</h2>
+    <div class="contact-container">
+        <div class="contact-info">
+            <p>📍 <b>Address:</b>Jalgaon Rd, near Radhe krushna mangal karyalay, Hudco, N 9, Shivaji Nagar, Chhatrapati Sambhajinagar, Maharashtra 431003.</p>
+            <p>🕒 <b>Timing:</b> 10:00 AM - 10:00 PM</p>
+            <a href="tel:+919075054826" class="contact-item">
+                <img src="images/phone.png" alt="Call"> <span>+91 90750 54826</span>
+            </a>
+            <a href="https://wa.me/919075054826" class="contact-item">
+                <img src="images/whatsapp.png" alt="WhatsApp"> <span>WhatsApp Us</span>
+            </a>
+            <a href="https://instagram.com/stir_and_sip_juicebar_and_cafe" class="contact-item">
+                <img src="images/instagram.png" alt="Instagram"> <span>Follow on Instagram</span>
+            </a>
+        </div>
+        <div class="map-box">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3751.535835718916!2d75.35654537522649!3d19.90181238148026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdba3656878e79d%3A0x9b592923b20d191d!2sStir%20and%20Sip%20Juice%20Bar%20and%20cafe!5e0!3m2!1sen!2sin!4v1768725241195!5m2!1sen!2sin" 
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</div>
+<div id="cart-container">
+    <h4>Your Selection 🛒</h4>
+    <ul id="cart-items"></ul>
+    <div class="total-price">Total: ₹<span id="total-amount">0</span></div>
+    <button class="hero-btn" style="width:100%; margin-top:10px; font-size:14px; padding:10px;" onclick="checkoutWhatsApp()">Order via WhatsApp</button>
+</div>
+<footer>
+    <p>© 2026 STIR & SIP Juice Bar And Cafe | Designed with Abhi</p>
+</footer>
+
+<script>
+    // Menu Toggle
+    function toggleMenu() {
+        document.getElementById('navbar').classList.toggle('open');
+    }
+
+    // Section Switching Logic
+    function show(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        if (el) {
+            el.classList.add('active');
+        } else {
+            // Find button by text if not passed (e.g. from Order Now button)
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => {
+                if(btn.innerText.toLowerCase() === id.toLowerCase()) btn.classList.add('active');
+            });
+        }
+
+        if (window.innerWidth <= 768) {
+            document.getElementById('navbar').classList.remove('open');
+        }
+        window.scrollTo(0,0);
+    }
+
+    // Slider Logic
+    const texts = [
+        'Pure & Refreshing Juices Made Daily 🍹',
+        'Try Our Special Chocolate Shakes 🍫',
+        'Coffee with us is a relationship! ☕'
+    ];
+
+    let currentIndex = 0;
+
+    function updateSlider(index) {
+        const container = document.getElementById('slides-container');
+        const dots = document.querySelectorAll('.dot');
+        const heroText = document.getElementById('hero-text');
+
+        container.style.transform = `translateX(${index * -100}vw)`;
+        
+        heroText.style.opacity = 0;
+        setTimeout(() => {
+            heroText.innerText = texts[index];
+            heroText.style.opacity = 1;
+        }, 400);
+
+        dots.forEach(dot => dot.classList.remove('active-dot'));
+        dots[index].classList.add('active-dot');
+    }
+
+    function autoSlide() {
+        currentIndex = (currentIndex + 1) % 3;
+        updateSlider(currentIndex);
+    }
+
+    function currentSlide(n) {
+        currentIndex = n;
+        updateSlider(currentIndex);
+    }
+
+    setInterval(autoSlide, 5000);
+
+    // ===== CHEF SLIDER AUTO SCROLL (MOBILE) =====
+
+const chefCards = document.querySelector('.chef-cards');
+const chefCard = document.querySelector('.chef-card');
+
+let chefIndex = 0;
+let chefInterval;
+let isMobile = window.innerWidth <= 768;
+
+function startChefSlider() {
+  if (!isMobile || !chefCards || !chefCard) return;
+
+  const cardWidth = chefCard.getBoundingClientRect().width + 20;
+
+  chefInterval = setInterval(() => {
+    chefIndex++;
+
+    if (chefIndex >= chefCards.children.length) {
+      chefIndex = 0;
+      chefCards.style.transition = 'none';
+      chefCards.style.transform = 'translateX(0)';
+    } else {
+      chefCards.style.transition = 'transform 0.6s ease';
+      chefCards.style.transform = `translateX(-${chefIndex * cardWidth}px)`;
+    }
+  }, 2500);
+}
+
+// Pause on touch
+chefCards.addEventListener('touchstart', () => {
+  clearInterval(chefInterval);
+});
+
+// Resume after touch
+chefCards.addEventListener('touchend', () => {
+  startChefSlider();
+});
+
+// Start slider on load
+window.addEventListener('load', startChefSlider);
+
+window.addEventListener('resize', () => {
+  isMobile = window.innerWidth <= 768;
+  clearInterval(chefInterval);
+  chefCards.style.transform = 'translateX(0)';
+  chefIndex = 0;
+  startChefSlider();
+});
+
+let cart = [];
+let total = 0;
+
+function addToCart(name, price) {
+    cart.push({ name, price });
+    total += price;
+    updateCartUI();
+    
+    // कार्ट बॉक्स दाखवा
+    document.getElementById('cart-container').style.display = 'block';
+}
+
+// १. नवीनremoveFromCart फंक्शन
+function removeFromCart(index) {
+    // टोटलमधून त्या आयटमची किंमत वजा करा
+    total -= cart[index].price;
+    
+    // कार्टमधून तो आयटम काढून टाका
+    cart.splice(index, 1);
+    
+    // जर कार्ट रिकामी झाली तर बॉक्स लपवा
+    if (cart.length === 0) {
+        document.getElementById('cart-container').style.display = 'none';
+    }
+    
+    updateCartUI();
+}
+
+// २. सुधारित updateCartUI फंक्शन (ज्यामध्ये 'X' बटण असेल)
+function updateCartUI() {
+    const list = document.getElementById('cart-items');
+    const totalDisplay = document.getElementById('total-amount');
+    
+    list.innerHTML = "";
+    
+    cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.style.marginBottom = "8px";
+        li.innerHTML = `
+            <span>${item.name} (₹${item.price})</span>
+            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+        `;
+        list.appendChild(li);
+    });
+    
+    totalDisplay.innerText = total;
+}
+
+
+function checkoutWhatsApp() {
+    if (cart.length === 0) {
+        alert("तुमचं कार्ट रिकामं आहे!");
+        return;
+    }
+
+    // तुमचा नंबर येथे बदला (उदा. 91 पुढे लावून तुमचा 10 अंकी नंबर)
+    let phoneNumber = "919075054826"; 
+    
+    let message = "Hello SIR! I want to order:%0A%0A";
+    
+    cart.forEach((item, index) => {
+        message += `${index + 1}. ${item.name} - ₹${item.price}%0A`;
+    });
+    
+    message += `%0A*Total Amount: ₹${total}*`;
+    
+    // WhatsApp URL तयार करणे
+    let url = "https://wa.me/" + phoneNumber + "?text=" + message;
+    
+    window.open(url, '_blank');
+
+    cart = [];
+    total = 0;
+    updateCartUI();
+    document.getElementById('cart-container').style.display = 'none';
+}
+</script>
+
+
+    <span><a href="https://wa.me/919075054826?text=Hello! I have a query about STIR %26 SIP." class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 100%; height: 100%; padding: 10px; box-sizing: border-box;">
+</a></span> 
+</a>
+</body>
+</html>
